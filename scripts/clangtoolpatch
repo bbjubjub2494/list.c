@@ -1,0 +1,41 @@
+#!/bin/sh
+
+set -e
+
+SUBDIRECTORY_OK=1
+. "$(git --exec-path)/git-sh-setup"
+cd_to_toplevel
+
+tempdir="$(mktemp -d fmtpatch-XXXXXX)"
+trap 'rm -rf "$tempdir"' EXIT
+(
+    cp "$@" "$tempdir"
+    cp iwyu-mappings.imp "$tempdir"
+    cd "$tempdir"
+    git init --quiet
+)
+
+(
+    cd "$tempdir"
+    git add .
+    clang-format -i "$@" >/dev/null
+    git diff
+) > "clang-format.patch"
+
+(
+    cd "$tempdir"
+    git add .
+    clang-tidy -quiet -fix-errors "$@" -- $NIX_CFLAGS_COMPILE $CFLAGS >/dev/null
+    git diff
+) > "clang-tidy.patch"
+
+(
+    cd "$tempdir"
+    git add .
+    {
+        for f in "$@"; do
+            include-what-you-use $NIX_CFLAGS_COMPILE $CFLAGS -Xiwyu --mappings iwyu-mappings.imp -c "$f"
+        done
+    } |& fix_includes.py >/dev/null || true
+    git diff
+) > "iwyu.patch"
