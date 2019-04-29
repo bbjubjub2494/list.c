@@ -30,6 +30,7 @@ mkShell {
 
     # Python packages
     python37Packages.hypothesis
+    python37Packages.cffi
     ];
 
     NIX_DEBUG_DIR = "${glibc.debug}/lib/debug";

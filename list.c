@@ -1,11 +1,6 @@
-#include <stdint.h>
-#include <stdbool.h>
-#include <stdio.h>
-#include <stdlib.h>
+#include "list.h"
 
-struct ptrmix {
-  uintptr_t content;
-};
+#include <stdlib.h>
 
 struct ptrmix mixptr(void *a, void *b) {
   return (struct ptrmix){(uintptr_t)a ^ (uintptr_t)b};
@@ -18,18 +13,6 @@ void remixptr(struct ptrmix *mix, void *a, void *b) {
   mix->content ^= (uintptr_t)a;
   mix->content ^= (uintptr_t)b;
 }
-
-typedef int list_content;
-
-struct list_node {
-  struct ptrmix mix;
-  list_content value;
-};
-
-struct list {
-  struct list_node *first;
-  struct list_node *last;
-};
 
 static struct list_node *list_make_node(list_content value,
                                         struct list_node *prev,
@@ -62,25 +45,6 @@ void list_insert_back(struct list *l, list_content value) {
   l->last = new_last;
 }
 
-struct list_it {
-  struct list_node *cur, *prev;
-  bool skipstep;
-};
-
-#define for_each_list_impl(start)                                              \
-  for (struct list_it it = {.cur = (start)}; it.cur != NULL; list_step(&it))
-static inline void list_step(struct list_it *it) {
-  if (it->skipstep) {
-    it->skipstep = false;
-    return;
-  }
-  struct list_node *next = unmixptr(it->cur->mix, it->prev);
-  it->prev = it->cur;
-  it->cur = next;
-}
-#define for_each_list(l) for_each_list_impl((l)->first)
-#define for_each_list_reverse(l) for_each_list_impl((l)->last)
-
 void list_print(struct list *l) {
   printf("(");
   const char *sep = "";
@@ -100,6 +64,8 @@ void list_clear(struct list *l) {
   l->first = l->last = NULL;
 }
 
+extern inline void list_step(struct list_it *it);
+
 void list_remove(struct list *l, struct list_it *it) {
   if (it->cur == l->first) {
     struct list_node *second = unmixptr(l->first->mix, NULL);
@@ -116,7 +82,7 @@ void list_remove(struct list *l, struct list_it *it) {
     remixptr(&next->mix, it->cur, it->prev);
   free(it->cur);
   it->cur = next;
-  it->skipstep = true;
+  it->_skipstep = true;
 }
 
 int main() {

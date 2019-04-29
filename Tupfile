@@ -17,4 +17,7 @@ export NIX_DEBUG_DIR
 
 : *.[ch] |> !clangtoolpatch |>
 
+: list.o |> scripts/build-hypothesis_bridge |> _hypothesis_bridge.c _hypothesis_bridge.o _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so
+: _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so |> scripts/hypothesis_tests |>
+
 .gitignore
