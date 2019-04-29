@@ -1,0 +1,45 @@
+#!/usr/bin/env python
+from cffi import FFI
+
+ffibuilder = FFI()
+
+ffibuilder.cdef("""
+struct ptrmix {
+  uintptr_t content;
+};
+
+struct ptrmix mixptr(void *a, void *b);
+void *unmixptr(struct ptrmix mix, void *a);
+void remixptr(struct ptrmix *mix, void *a, void *b);
+
+
+typedef int list_content;
+
+struct list_node {
+  struct ptrmix mix;
+  list_content value;
+};
+
+struct list {
+  struct list_node *first;
+  struct list_node *last;
+};
+
+void list_insert_front(struct list *l, list_content value);
+void list_insert_back(struct list *l, list_content value);
+void list_print(struct list *l);
+void list_clear(struct list *l);
+
+
+struct list_it {
+  struct list_node *cur, *prev;
+  ...;
+};
+
+void list_step(struct list_it *it);
+void list_remove(struct list *l, struct list_it *it);
+""")
+ffibuilder.set_source("_hypothesis_bridge", """
+#include "list.h"
+""", extra_objects=["list.o"])
+ffibuilder.compile(verbose=True)
