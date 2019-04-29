@@ -19,7 +19,6 @@ void remixptr(struct ptrmix *mix, void *a, void *b) {
   mix->content ^= (uintptr_t)b;
 }
 
-
 typedef int list_content;
 
 struct list_node {
@@ -32,20 +31,22 @@ struct list {
   struct list_node *last;
 };
 
-static struct list_node *list_make_node(list_content value, struct list_node *prev, struct list_node *next) {
+static struct list_node *list_make_node(list_content value,
+                                        struct list_node *prev,
+                                        struct list_node *next) {
   struct list_node *new_node = malloc(sizeof *new_node);
   new_node->value = value;
   new_node->mix = mixptr(prev, next);
   return new_node;
 }
 
-void list_insert_front(struct list* l, list_content value) {
+void list_insert_front(struct list *l, list_content value) {
   if (l->first == NULL) {
     l->first = l->last = list_make_node(value, NULL, NULL);
     return;
   }
   struct list_node *second = unmixptr(l->first->mix, NULL),
-    *new_first = list_make_node(value, NULL, l->first);
+                   *new_first = list_make_node(value, NULL, l->first);
   l->first->mix = mixptr(new_first, second);
   l->first = new_first;
 }
@@ -56,7 +57,7 @@ void list_insert_back(struct list *l, list_content value) {
     return;
   }
   struct list_node *penultimate = unmixptr(l->last->mix, NULL),
-    *new_last = list_make_node(value, l->last, NULL);
+                   *new_last = list_make_node(value, l->last, NULL);
   l->last->mix = mixptr(penultimate, new_last);
   l->last = new_last;
 }
@@ -66,7 +67,8 @@ struct list_it {
   bool skipstep;
 };
 
-#define for_each_list_impl(start) for (struct list_it it = {.cur = (start)}; it.cur != NULL; list_step(&it))
+#define for_each_list_impl(start)                                              \
+  for (struct list_it it = {.cur = (start)}; it.cur != NULL; list_step(&it))
 static inline void list_step(struct list_it *it) {
   if (it->skipstep) {
     it->skipstep = false;
