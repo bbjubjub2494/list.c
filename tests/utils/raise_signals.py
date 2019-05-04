@@ -12,6 +12,14 @@ def raise_signals(signals=FATAL_SIGNALS):
     :param Sequence[signals.Signals] signals:
         list of signals to be handled, by default :data:`FATAL_SIGNALS`.
     :raise Signal: when a signal is received during execution of the context.
+
+    >>> import os
+    >>> with raise_signals(): #doctest:+IGNORE_EXCEPTION_DETAIL
+    ...     os.kill(os.getpid(), 11)
+    ...
+    Traceback (most recent call last):
+      ...
+    Signal:
     """
     def handler(sig, frame):
         raise Signal(sig)
