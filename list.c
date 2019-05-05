@@ -45,7 +45,7 @@ void list_insert_back(struct list *l, list_content value) {
   l->last = new_last;
 }
 
-void list_print(struct list *l) {
+void list_print(const struct list *l) {
   printf("(");
   const char *sep = "";
   for_each_list_reverse(l) {
