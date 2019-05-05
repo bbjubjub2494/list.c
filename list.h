@@ -29,6 +29,7 @@ void *unmixptr(struct ptrmix mix, void *a);
 //   *mix == ptrmix(b, c)
 void remixptr(struct ptrmix *mix, void *a, void *b);
 
+/******************************************************************************/
 
 typedef int list_content;
 
@@ -38,22 +39,22 @@ struct list_node {
 };
 
 struct list {
-  struct list_node *first;
-  struct list_node *last;
+  struct list_node *first, *last;
 };
 
 void list_insert_front(struct list *l, list_content value);
 void list_insert_back(struct list *l, list_content value);
-void list_print(struct list *l);
+void list_print(const struct list *l);
 void list_clear(struct list *l);
 
+/******************************************************************************/
 
 struct list_it {
   struct list_node *cur, *prev;
   bool _skipstep;
 };
 
-#define for_each_list_impl(start)                                       \
+#define for_each_list_impl(start)                                              \
   for (struct list_it it = {.cur = (start)}; it.cur != NULL; list_step(&it))
 inline void list_step(struct list_it *it) {
   if (it->_skipstep) {
