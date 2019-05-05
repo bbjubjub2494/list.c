@@ -31,7 +31,10 @@ void remixptr(struct ptrmix *mix, void *a, void *b);
 
 /******************************************************************************/
 
-typedef int list_content;
+// Type for the data stored in a list. This choice should be convenient for most
+// users: it can store small integers directly, or pointers with arbitrary
+// qualifiers using simple casts.
+typedef intptr_t list_content;
 
 struct list_node {
   struct ptrmix mix;
