@@ -86,7 +86,7 @@ void list_remove(struct list *l, struct list_it *it) {
 }
 
 int main() {
-  struct list l = {};
+  struct list l = {0};
   list_print(&l);
   printf("\n");
   list_insert_front(&l, 0);
