@@ -15,7 +15,7 @@ void *unmixptr(struct ptrmix mix, void *a);
 void remixptr(struct ptrmix *mix, void *a, void *b);
 
 
-typedef int list_content;
+typedef intptr_t list_content;
 
 struct list_node {
   struct ptrmix mix;

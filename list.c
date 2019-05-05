@@ -1,6 +1,7 @@
 #include "list.h"
 
 #include <stdlib.h>
+#include <inttypes.h>
 
 struct ptrmix mixptr(void *a, void *b) {
   return (struct ptrmix){(uintptr_t)a ^ (uintptr_t)b};
@@ -49,7 +50,7 @@ void list_print(const struct list *l) {
   printf("(");
   const char *sep = "";
   for_each_list_reverse(l) {
-    printf("%s%d", sep, it.cur->value);
+    printf("%s%"PRIdPTR, sep, it.cur->value);
     sep = ", ";
   }
   printf(")");
