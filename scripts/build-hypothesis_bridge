@@ -4,6 +4,8 @@ from cffi import FFI
 ffibuilder = FFI()
 
 ffibuilder.cdef("""
+const uintptr_t UINTPTR_MAX;
+
 struct ptrmix {
   uintptr_t content;
 };
@@ -40,6 +42,7 @@ void list_step(struct list_it *it);
 void list_remove(struct list *l, struct list_it *it);
 """)
 ffibuilder.set_source("_hypothesis_bridge", """
+#include <stdint.h>
 #include "list.h"
 """, extra_objects=["list.o"])
 ffibuilder.compile(verbose=True)
