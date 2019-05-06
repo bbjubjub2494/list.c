@@ -1,5 +1,6 @@
 CC := clang
-CFLAGS := -std=c11 -g
+CFLAGS := -std=c99 -pedantic
+CFLAGS += -g
 CFLAGS += -Wall -Wextra
 export NIX_CFLAGS_COMPILE
 export NIX_LDFLAGS
