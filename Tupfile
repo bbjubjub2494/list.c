@@ -27,4 +27,7 @@ export NIX_DEBUG_DIR
 
 : foreach *.rst |> rst2html %f %o |> %B.html
 
+# Documentation
+: |> sphinx-build doc/ doc/_build/ |> ^doc/_build/
+
 .gitignore
