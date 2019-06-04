@@ -30,6 +30,8 @@ mkShell {
 
     # Python packages
     python37Packages.hypothesis
+    python37Packages.sphinx
+    python37Packages.breathe
     python37Packages.cffi
     ];
 
