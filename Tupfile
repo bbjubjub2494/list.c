@@ -19,11 +19,11 @@ export NIX_DEBUG_DIR
 : *.[ch] |> !clangtoolpatch |>
 
 # Python-on-Python tests
-: |> scripts/hypothesis_selftests |> ^__pycache__
+: |> python -m unittest tests.utils |> ^.*/__pycache__
 
 # Python-on-C tests
 : list.o |> scripts/build-hypothesis_bridge |> _hypothesis_bridge.c _hypothesis_bridge.o _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so
-: _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so |> scripts/hypothesis_tests |> ^\.hypothesis ^.*/__pycache__
+: _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so |> python -m unittest tests |> ^\.hypothesis ^.*/__pycache__
 
 : foreach *.rst |> rst2html %f %o |> %B.html
 
