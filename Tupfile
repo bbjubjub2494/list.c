@@ -16,7 +16,6 @@ export NIX_DEBUG_DIR
 # compile C code
 : foreach *.c |> !makeheaders |> {headers}
 : foreach *.c | {headers} |> !cc |>
-: list.o |> !ld |> list
 
 : *.c |> !clangtoolpatch |>
 

@@ -155,22 +155,3 @@ void list_remove(list *l, list_it *it) {
   it->cur = next;
   it->_skipstep = true;
 }
-
-int main() {
-  list l = {0};
-  list_print(&l);
-  printf("\n");
-  list_insert_front(&l, 0);
-  list_insert_front(&l, 1);
-  list_insert_front(&l, 2);
-  list_insert_front(&l, 3);
-  list_insert_front(&l, 4);
-  for_each_list(&l) {
-    if (it.cur->value % 2 == 0)
-      list_remove(&l, &it);
-  }
-  list_print(&l);
-  printf("\n");
-  list_clear(&l);
-  return EXIT_SUCCESS;
-}
