@@ -10,12 +10,10 @@ export NIX_DEBUG_DIR
 !cc = |> ^ CC %f^ $(CC) ${NIX_CFLAGS_COMPILE} $(CFLAGS) -c %f |> %B.o
 !ld = |> ^ LD %o^ $(CC) ${NIX_LDFLAGS} $(LDLIBS) -o %o %f |> %B
 !clangtoolpatch = |> ^ FMT %f^ CFLAGS="$(CFLAGS)" scripts/clangtoolpatch %f |> clang-format.patch clang-tidy.patch iwyu.patch
-!makeheaders = |> ^ MKHEADER %f^ makeheaders %f |> %B.h
-
 
 # compile C code
-: foreach *.c |> !makeheaders |> {headers}
-: foreach *.c | {headers} |> !cc |>
+: *.c |> ^o MKHEADER^ makeheaders %f |> list.h ptrmix.h {headers}
+: foreach *.c | {headers} |> !cc |> {objs}
 
 : *.c |> !clangtoolpatch |>
 
@@ -23,7 +21,7 @@ export NIX_DEBUG_DIR
 : |> python -m unittest tests.utils |> ^.*/__pycache__
 
 # Python-on-C tests
-: list.o {headers} |> scripts/build-hypothesis_bridge |> _hypothesis_bridge.c _hypothesis_bridge.o _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so
+: {objs} {headers} |> scripts/build-hypothesis_bridge |> _hypothesis_bridge.c _hypothesis_bridge.o _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so
 : _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so |> python -m unittest tests |> ^\.hypothesis ^.*/__pycache__
 
 : foreach *.rst |> rst2html %f %o |> %B.html
