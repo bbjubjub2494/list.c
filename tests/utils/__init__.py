@@ -1,4 +1,5 @@
 from .raise_signals import FATAL_SIGNALS, raise_signals, Signal
+from .attr_proxy import AttrProxy
 
 def load_tests(loader, standard_tests, pattern):
     from . import test_raise_signals
