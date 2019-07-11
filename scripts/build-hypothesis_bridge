@@ -5,6 +5,7 @@ ffibuilder = FFI()
 
 ffibuilder.cdef("""
 const uintptr_t UINTPTR_MAX;
+const intptr_t INTPTR_MIN, INTPTR_MAX;
 
 struct ptrmix {
   uintptr_t content;
