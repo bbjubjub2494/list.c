@@ -81,7 +81,7 @@ class ListSM(RuleBasedStateMachine):
         it = reversed(self) if reverse else iter(self)
         for _ in it:
             if it.cur in nodes:
-                lib.list_remove(self._var, AttrProxy.deproxy(it))
+                lib.list_remove(self._var, AttrProxy.unwrap(it))
         for n in nodes:
             i = self._model.index(n)
             del self._model_contents[i]

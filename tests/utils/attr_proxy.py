@@ -15,7 +15,7 @@ class AttrProxy(Generic[S]):
         return setattr(self._subject, attr_name, new_value)
 
     @staticmethod
-    def deproxy(proxy: AttrProxy[S]) -> S:
+    def unwrap(proxy: AttrProxy[S]) -> S:
         return proxy._subject
 
     @staticmethod
