@@ -36,16 +36,3 @@ function causes a signal to be received. Use with care because it is powerful.
 .. data:: tests.utils.FATAL_SIGNALS
 
    List of signals that are both (usually) core-dumpy and portable.
-
-Capturing attribute access
---------------------------
-
-.. autoclass:: tests.utils.AttrProxy
-
-.. automethod:: tests.utils.AttrProxy.__getattr__
-
-.. automethod:: tests.utils.AttrProxy.__setattr__
-
-.. automethod:: tests.utils.AttrProxy.unwrap
-
-.. automethod:: tests.utils.AttrProxy.raw_setattr
