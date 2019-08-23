@@ -12,16 +12,15 @@ export NIX_DEBUG_DIR
 !clangtoolpatch = |> ^ FMT %f^ CFLAGS="$(CFLAGS)" scripts/clangtoolpatch %f |> clang-format.patch clang-tidy.patch iwyu.patch
 
 # compile C code
-: *.c |> ^o MKHEADER^ makeheaders %f |> list.h ptrmix.h {headers}
-: foreach *.c | {headers} |> !cc |> {objs}
+: foreach *.c |> !cc |> {objs}
 
-: *.c |> !clangtoolpatch |>
+: *.[ch] |> !clangtoolpatch |>
 
 # Python-on-Python tests
 : |> python -m unittest tests.utils |> ^.*/__pycache__
 
 # Python-on-C tests
-: {objs} {headers} |> scripts/build-hypothesis_bridge |> _hypothesis_bridge.c _hypothesis_bridge.o _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so
+: {objs} |> scripts/build-hypothesis_bridge |> _hypothesis_bridge.c _hypothesis_bridge.o _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so
 : _hypothesis_bridge.cpython-37m-x86_64-linux-gnu.so |> python -m unittest tests |> ^\.hypothesis ^.*/__pycache__
 
 : foreach *.rst |> rst2html %f %o |> %B.html

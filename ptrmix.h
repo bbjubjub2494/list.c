@@ -1,6 +1,3 @@
-#include "ptrmix.h"
-
-#if INTERFACE
 #include <stdint.h>
 
 // The heart of the xorlist system: a ptrmix holds the exclusive or of 2 pointer
@@ -10,30 +7,22 @@
 struct ptrmix {
   uintptr_t content;
 };
-#endif // INTERFACE
 
 // mix two pointers with xor.
 // properties:
 //   ptrmix(a, b) == ptrmix(b, a)
-struct ptrmix mixptr(void *a, void *b) {
-  return (struct ptrmix){(uintptr_t)a ^ (uintptr_t)b};
-}
+struct ptrmix mixptr(void *a, void *b);
 
 // retrieve a pointer from a ptrmix.
 // preconditions:
 //   there exists b such that mix == ptrmix(a, b)
 // postconditions:
 //   the return value is equal to b
-void *unmixptr(struct ptrmix mix, void *a) {
-  return (void *)(mix.content ^ (uintptr_t)a);
-}
+void *unmixptr(struct ptrmix mix, void *a);
 
 // alter a pointer within the ptrmix.
 // preconditions:
 //   there exists c such that *mix == ptrmix(a, c)
 // postconditions:
 //   *mix == ptrmix(b, c)
-void remixptr(struct ptrmix *mix, void *a, void *b) {
-  mix->content ^= (uintptr_t)a;
-  mix->content ^= (uintptr_t)b;
-}
+void remixptr(struct ptrmix *mix, void *a, void *b);

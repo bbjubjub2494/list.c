@@ -9,7 +9,6 @@ let
     sha256 = "0q2m2qhyga9yq29yz90ywgjbn9hdahs7i8wwlq7b55rdbyiwa5dy";
   }) {}).extend (self: super: {
     pythonPackages = self.python37Packages;
-    makeheaders = self.callPackage ./nix/pkgs/makeheaders { };
     llvmPackages = self.llvmPackages_7;
   });
 in
@@ -25,7 +24,6 @@ mkShell {
     tup
     clang-tools
     include-what-you-use
-    makeheaders
 
     # C libraries
     glibc glibc.dev glibc.debug
